@@ -1,0 +1,18 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+     >
+
+    <com.example.slidemenu.SlideMenu
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+        
+        <!-- 菜单布局 -->
+        <include layout="@layout/menu"/>
+        
+        <!-- 主界面布局 -->
+       	<include layout="@layout/main_frame"/>
+    </com.example.slidemenu.SlideMenu>
+
+</RelativeLayout>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="60dp" >
+
+    <RelativeLayout
+        android:layout_margin="60dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <TextView
+            style="@style/TabReadStyle"
+            android:drawableTop="@drawable/tab_read"
+            android:text="共享资源" />
+
+        <TextView
+            style="@style/TabReadStyle"
+            android:layout_alignParentRight="true"
+            android:drawableTop="@drawable/tab_news"
+            android:text="最新资讯" />
+
+        <TextView
+            style="@style/TabReadStyle"
+            android:layout_centerVertical="true"
+            android:drawableTop="@drawable/tab_local"
+            android:gravity="center_horizontal"
+            android:text="人脉圈" />
+
+        <TextView
+            style="@style/TabReadStyle"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:drawableTop="@drawable/tab_pics"
+            android:gravity="center_horizontal"
+            android:text="直播室" />
+
+        <TextView
+            style="@style/TabReadStyle"
+            android:layout_alignParentBottom="true"
+            android:drawableTop="@drawable/tab_ugc"
+            android:gravity="center_horizontal"
+            android:text="KTV" />
+
+        <TextView
+            style="@style/TabReadStyle"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:drawableTop="@drawable/tab_ties"
+            android:gravity="center_horizontal"
+            android:text="更多" />
+    </RelativeLayout>
+
+</RelativeLayout>
