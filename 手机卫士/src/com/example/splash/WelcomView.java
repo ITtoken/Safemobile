@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,10 +19,12 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.text.format.Time;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +48,7 @@ public class WelcomView extends Activity {
 	private TextView tv_welcome;
 	private String vn;// 本地获取的版本名
 	private int vc;// 本地获取的版本号
+	private String aPPName;// 获取应用名称
 
 	// 网络获取版本数据
 	private String versionName;
@@ -65,14 +69,17 @@ public class WelcomView extends Activity {
 			case URL_EXCEPTION:// url异常提示
 				Toast.makeText(WelcomView.this, "请求资源不存在", Toast.LENGTH_SHORT)
 						.show();
+				goToMainActivity();
 				break;
 			case INTERNET_EXCEPTION:// 网络异常提示
 				Toast.makeText(WelcomView.this, "网络链接异常", Toast.LENGTH_SHORT)
 						.show();
+				goToMainActivity();
 				break;
 			case JSON_EXCEPTION:// 获取json数据异常
 				Toast.makeText(WelcomView.this, "数据请求失败", Toast.LENGTH_SHORT)
 						.show();
+				goToMainActivity();
 				break;
 
 			}
@@ -99,9 +106,11 @@ public class WelcomView extends Activity {
 		new Thread() {
 			private Message msg;
 			private HttpURLConnection conn;
+			Date date = new Date();
 
 			public void run() {
 				try {
+					long currentTime = date.getTime();
 					msg = handler.obtainMessage();
 
 					URL url = new URL("http://10.100.0.173/update.json");
@@ -112,8 +121,8 @@ public class WelcomView extends Activity {
 
 					if (conn.getResponseCode() == 200) {
 						InputStream in = conn.getInputStream();
-
 						String content = In2Out.getInputstreamInfo(in);
+
 						// 将获取的数据转换成JSOn对象：JsonObject类
 						JSONObject json = new JSONObject(content);
 						versionCode = (Integer) json.get("versionCode");// 胡群殴版本号
@@ -122,13 +131,24 @@ public class WelcomView extends Activity {
 							versionName = (String) json.get("versionName");// 获取版本名
 							description = (String) json.get("description");// 获取新版本描述
 							downloadURL = (String) json.get("downloadURL");// 获取新版本下载URL
-							System.out.println("版本名:" + versionName + ",版本号:"
-									+ versionCode + ",描述:" + description
-									+ ",下载链接:" + downloadURL);
+							aPPName = (String) json.get("APPName");
+
+							System.out.println("应用名：" + aPPName + "下载地址："
+									+ downloadURL);
 
 							msg.what = UPDATE_DIALOG;
 						} else {
-							msg.what = NO_UPDATE;
+							long nowTime = date.getTime();
+							long time = nowTime - currentTime;
+							if (time < 2000) {
+								try {
+									Thread.sleep(2000 - time);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
+								msg.what = NO_UPDATE;
+
+							}
 						}
 
 					}
@@ -181,6 +201,7 @@ public class WelcomView extends Activity {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				downLoadApp();
+				goToMainActivity();
 			}
 		});
 		builder.setNegativeButton("以后再说", new OnClickListener() {
@@ -198,9 +219,9 @@ public class WelcomView extends Activity {
 	public void downLoadApp() {
 		if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
 			HttpUtils utils = new HttpUtils();
-			String target = Environment.getExternalStorageDirectory()
-					+ "/MobileSafe.apk";
-			utils.download("http://10.100.0.173/MobileSafe.apk", target, true,
+			String target = Environment.getExternalStorageDirectory().getPath()
+					+ "/" + aPPName;
+			utils.download(downloadURL, target, true, true,
 					new RequestCallBack<File>() {
 
 						@Override
@@ -218,6 +239,12 @@ public class WelcomView extends Activity {
 							// tv_downStat.setVisibility(View.GONE);// 设置为不可见
 							Toast.makeText(WelcomView.this, "下载成功",
 									Toast.LENGTH_SHORT).show();
+							// 启动安装程序
+							Intent intent = new Intent(Intent.ACTION_VIEW);
+							intent.addCategory(Intent.CATEGORY_DEFAULT);
+							intent.setDataAndType(Uri.fromFile(arg0.result),
+									"application/vnd.android.package-archive");
+							startActivity(intent);
 						}
 
 						@Override
@@ -228,6 +255,7 @@ public class WelcomView extends Activity {
 		} else {
 			Toast.makeText(WelcomView.this, "SD卡未找到", Toast.LENGTH_SHORT)
 					.show();
+			goToMainActivity();
 		}
 
 	}
