@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -24,7 +25,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.text.format.Time;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,7 +38,6 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 
 public class WelcomView extends Activity {
-
 	protected static final int UPDATE_DIALOG = 0;
 	protected static final int URL_EXCEPTION = 1;
 	protected static final int INTERNET_EXCEPTION = 2;
@@ -46,6 +45,7 @@ public class WelcomView extends Activity {
 	protected static final int NO_UPDATE = 4;
 
 	private TextView tv_welcome;
+	private TextView tv_downStat;
 	private String vn;// 本地获取的版本名
 	private int vc;// 本地获取的版本号
 	private String aPPName;// 获取应用名称
@@ -81,146 +81,163 @@ public class WelcomView extends Activity {
 						.show();
 				goToMainActivity();
 				break;
-
+	
 			}
 		}
 	};
-	private TextView tv_downStat;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_splash);
 
-		tv_welcome = (TextView) findViewById(R.id.tv_welcome);
-		tv_welcome.setText("版本号：" + getVersionName());
-		tv_downStat = (TextView) findViewById(R.id.tv_downstat);
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
+	setContentView(R.layout.activity_splash);
 
-		getUpdateInfo();
-	}
+	tv_welcome = (TextView) findViewById(R.id.tv_welcome);
+	tv_welcome.setText("版本号：" + getVersionName());
+	tv_downStat = (TextView) findViewById(R.id.tv_downstat);
 
-	/**
-	 * 通过网络获取版本信息
-	 */
-	private void getUpdateInfo() {
-		new Thread() {
-			private Message msg;
-			private HttpURLConnection conn;
-			Date date = new Date();
+	getUpdateInfo();
+}
 
-			public void run() {
-				try {
-					long currentTime = date.getTime();
-					msg = handler.obtainMessage();
+/**
+ * 通过网络获取版本信息
+ */
+private void getUpdateInfo() {
+	new Thread() {
+		private Message msg;
+		private HttpURLConnection conn;
+		private Date date = new Date();
 
-					URL url = new URL("http://10.100.0.173/update.json");
-					conn = (HttpURLConnection) url.openConnection();
-					conn.setRequestMethod("GET");
-					conn.setConnectTimeout(5000);
-					conn.setReadTimeout(5000);
+		public void run() {
+			try {
+				long currentTime = date.getTime();
+				msg = handler.obtainMessage();
 
-					if (conn.getResponseCode() == 200) {
-						InputStream in = conn.getInputStream();
-						String content = In2Out.getInputstreamInfo(in);
+				URL url = new URL("http://10.100.0.173/update.json");
+				conn = (HttpURLConnection) url.openConnection();
+				conn.setRequestMethod("GET");
+				conn.setConnectTimeout(5000);
+				conn.setReadTimeout(5000);
 
-						// 将获取的数据转换成JSOn对象：JsonObject类
-						JSONObject json = new JSONObject(content);
-						versionCode = (Integer) json.get("versionCode");// 胡群殴版本号
+				if (conn.getResponseCode() == 200) {
+					InputStream in = conn.getInputStream();
+					String content = In2Out.getInputstreamInfo(in);
 
-						if (versionCode > vc) {
-							versionName = (String) json.get("versionName");// 获取版本名
-							description = (String) json.get("description");// 获取新版本描述
-							downloadURL = (String) json.get("downloadURL");// 获取新版本下载URL
-							aPPName = (String) json.get("APPName");
+					// 将获取的数据转换成JSOn对象：JsonObject类
+					JSONObject json = new JSONObject(content);
+					versionCode = (Integer) json.get("versionCode");// 胡群殴版本号
 
-							System.out.println("应用名：" + aPPName + "下载地址："
-									+ downloadURL);
+					if (versionCode > vc) {
+						versionName = (String) json.get("versionName");// 获取版本名
+						description = (String) json.get("description");// 获取新版本描述
+						downloadURL = (String) json.get("downloadURL");// 获取新版本下载URL
+						aPPName = (String) json.get("APPName");
 
-							msg.what = UPDATE_DIALOG;
-						} else {
-							long nowTime = date.getTime();
-							long time = nowTime - currentTime;
-							if (time < 2000) {
-								try {
-									Thread.sleep(2000 - time);
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-								}
-								msg.what = NO_UPDATE;
-
+						msg.what = UPDATE_DIALOG;
+					} else {
+						long nowTime = date.getTime();
+						long time = nowTime - currentTime;
+						if (time < 2000) {
+							try {
+								Thread.sleep(2000 - time);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
 							}
+							msg.what = NO_UPDATE;
+
 						}
-
 					}
-				} catch (MalformedURLException e) {
-					// url异常
-					msg.what = URL_EXCEPTION;
-					e.printStackTrace();
-				} catch (IOException e) {
-					// 网络链接异常
-					msg.what = INTERNET_EXCEPTION;
-					e.printStackTrace();
-				} catch (JSONException e) {
-					// json数据获取异常
-					msg.what = JSON_EXCEPTION;
-					e.printStackTrace();
-				} finally {
-					handler.sendMessage(msg);
-					conn.disconnect();
+
 				}
-			};
-		}.start();
-	}
+			} catch (MalformedURLException e) {
+				// url异常
+				msg.what = URL_EXCEPTION;
+				e.printStackTrace();
+			} catch (IOException e) {
+				// 网络链接异常
+				msg.what = INTERNET_EXCEPTION;
+				e.printStackTrace();
+			} catch (JSONException e) {
+				// json数据获取异常
+				msg.what = JSON_EXCEPTION;
+				e.printStackTrace();
+			} finally {
+				handler.sendMessage(msg);
+				conn.disconnect();
+			}
+		};
+	}.start();
+}
 
-	/**
-	 * 获取版本名
-	 * 
-	 * @return
-	 */
-	public String getVersionName() {
-		try {
-			PackageManager pm = getPackageManager();
-			PackageInfo info = pm.getPackageInfo(getPackageName(), 0);
-			vn = info.versionName;
-			vc = info.versionCode;
-			return vn;
-		} catch (NameNotFoundException e) {
-			e.printStackTrace();
+
+/**
+ * 获取版本名
+ * 
+ * @return
+ */
+public String getVersionName() {
+	try {
+		PackageManager pm = getPackageManager();
+		PackageInfo info = pm.getPackageInfo(getPackageName(), 0);
+		vn = info.versionName;
+		vc = info.versionCode;
+		return vn;
+	} catch (NameNotFoundException e) {
+		e.printStackTrace();
+	}
+	return null;
+}
+
+/**
+ * 弹出更新提示对话框
+ */
+private void showUpdateDialog() {
+	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	builder.setTitle("新版本更新提示(" + versionName + ")");
+	builder.setMessage(description);
+	builder.setPositiveButton("确认下载", new OnClickListener() {
+		@Override
+		public void onClick(DialogInterface dialog, int which) {
+			downLoadApp();
 		}
-		return null;
-	}
-
-	/**
-	 * 弹出更新提示对话框
-	 */
-	private void showUpdateDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("新版本更新提示(" + versionName + ")");
-		builder.setMessage(description);
-		builder.setPositiveButton("确认下载", new OnClickListener() {
+	});
+	builder.setNegativeButton("以后再说", new OnClickListener() {
+		@Override
+		public void onClick(DialogInterface dialog, int which) {
+			goToMainActivity();
+		}
+	});
+	builder.setOnCancelListener(new  OnCancelListener() {
+			/**
+			 * 当用户点击返回键或者取消对话框显示时，会调用此监听此方法
+			 */
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				downLoadApp();
+			public void onCancel(DialogInterface dialog) {
 				goToMainActivity();
 			}
 		});
-		builder.setNegativeButton("以后再说", new OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				goToMainActivity();
-			}
-		});
-		builder.show();
-	};
+	builder.show();
+	
+};
 
-	/**
-	 * 下载APP
-	 */
-	public void downLoadApp() {
-		if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
+/**
+ * 下载APP
+ */
+public void downLoadApp() {
+	if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+		File file = new File(Environment.getExternalStorageDirectory()+ "/" + aPPName);
+		//如果本地已经有下载好的文件,则直接使用安装
+		if (file.exists()) {
+			// 启动安装程序
+			Intent intent = new Intent(Intent.ACTION_VIEW);
+			intent.addCategory(Intent.CATEGORY_DEFAULT);
+			intent.setDataAndType(Uri.fromFile(file),"application/vnd.android.package-archive");
+			startActivityForResult(intent, 0);
+		} else {
+			//否则从服务器获取
 			HttpUtils utils = new HttpUtils();
-			String target = Environment.getExternalStorageDirectory().getPath()
-					+ "/" + aPPName;
+			String target = Environment.getExternalStorageDirectory() + "/"
+					+ aPPName;
 			utils.download(downloadURL, target, true, true,
 					new RequestCallBack<File>() {
 
@@ -230,40 +247,48 @@ public class WelcomView extends Activity {
 							super.onLoading(total, current, isUploading);
 
 							tv_downStat.setVisibility(View.VISIBLE);// 设置为可见
-							tv_downStat.setText("下载进度：" + current * 100 / total
-									+ "%");
+							tv_downStat.setText("下载进度：" + current * 100
+									/ total + "%");
 						}
 
 						@Override
 						public void onSuccess(ResponseInfo<File> arg0) {
-							// tv_downStat.setVisibility(View.GONE);// 设置为不可见
-							Toast.makeText(WelcomView.this, "下载成功",
-									Toast.LENGTH_SHORT).show();
+							// tv_downStat.setVisibility(View.GONE);//
+							// 设置为不可见
+							Toast.makeText(WelcomView.this, "下载成功",Toast.LENGTH_SHORT).show();
 							// 启动安装程序
 							Intent intent = new Intent(Intent.ACTION_VIEW);
 							intent.addCategory(Intent.CATEGORY_DEFAULT);
-							intent.setDataAndType(Uri.fromFile(arg0.result),
-									"application/vnd.android.package-archive");
-							startActivity(intent);
+							intent.setDataAndType(Uri.fromFile(arg0.result),"application/vnd.android.package-archive");
+							startActivityForResult(intent, 0);
 						}
 
 						@Override
-						public void onFailure(HttpException arg0, String arg1) {
-
+						public void onFailure(HttpException arg0,
+								String arg1) {
 						}
 					});
-		} else {
-			Toast.makeText(WelcomView.this, "SD卡未找到", Toast.LENGTH_SHORT)
-					.show();
+			}
+	} else {
+			Toast.makeText(WelcomView.this, "SD卡未找到", Toast.LENGTH_SHORT).show();
 			goToMainActivity();
 		}
 
 	}
 
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	super.onActivityResult(requestCode, resultCode, data);
+	//如果用户在安装界面取消安装，返回后直接进入主界面
+	goToMainActivity();
+}
+
+/**
+ * 进入主界面
+ */
 	public void goToMainActivity() {
 		Intent intent = new Intent(WelcomView.this, MainActivity.class);
 		startActivity(intent);
 		finish();
 	}
-
 }
