@@ -17,5 +17,15 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     	<item name="android:windowNoTitle">true</item>
     </style>
+    
+  <!-- 自定义标题栏样式 -->
+    <style name="TitleBarStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:textSize">25sp</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">#770000aa</item>
+    </style>
 
 </resources>
