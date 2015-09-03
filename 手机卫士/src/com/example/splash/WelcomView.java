@@ -17,6 +17,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -85,17 +86,27 @@ public class WelcomView extends Activity {
 			}
 		}
 	};
+	private SharedPreferences pref;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
 
+		pref = getSharedPreferences("update_stat", MODE_PRIVATE); 
 		tv_welcome = (TextView) findViewById(R.id.tv_welcome);
 		tv_welcome.setText("版本号：" + getVersionName());
 		tv_downStat = (TextView) findViewById(R.id.tv_downstat);
 
-		getUpdateInfo();
+		boolean stat = pref.getBoolean("stat", true);
+		if(stat){
+			Toast.makeText(this, "自动更新开启", 0).show();
+			getUpdateInfo();//检查更新APP并更新
+		}else{
+			Toast.makeText(this, "自动更新关闭", 0).show();
+			goToMainActivity();
+		}
+		
 	}
 
 	/**
@@ -124,7 +135,7 @@ public class WelcomView extends Activity {
 
 						// 将获取的数据转换成JSOn对象：JsonObject类
 						JSONObject json = new JSONObject(content);
-						versionCode = (Integer) json.get("versionCode");// 胡群殴版本号
+						versionCode = (Integer) json.get("versionCode");// 获取版本号
 
 						if (versionCode > vc) {
 							versionName = (String) json.get("versionName");// 获取版本名
@@ -170,7 +181,6 @@ public class WelcomView extends Activity {
 
 	/**
 	 * 获取版本名
-	 * 
 	 * @return
 	 */
 	public String getVersionName() {
