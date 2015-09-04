@@ -100,10 +100,8 @@ public class WelcomView extends Activity {
 
 		boolean stat = pref.getBoolean("stat", true);
 		if(stat){
-			Toast.makeText(this, "自动更新开启", 0).show();
 			getUpdateInfo();//检查更新APP并更新
 		}else{
-			Toast.makeText(this, "自动更新关闭", 0).show();
 			goToMainActivity();
 		}
 		
@@ -203,6 +201,7 @@ public class WelcomView extends Activity {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("新版本更新提示(" + versionName + ")");
 		builder.setMessage(description);
+		builder.setIcon(R.drawable.update_tip);
 		builder.setPositiveButton("确认下载", new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
