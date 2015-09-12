@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        style="@style/TitleBarStyle"
+        android:text="设置安全号码" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="SIM卡变更后：报警短信或发送给安全号码"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/safe_num"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="3dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="4"
+            android:singleLine="true"
+            android:background="@drawable/btn_normal"
+            android:hint="请输入安全号码"
+            android:padding="10dp" />
+
+        <TextView
+            android:id="@+id/chose_contanceter"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="3dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/buttonpressed_selector"
+            android:gravity="center"
+            android:text="＋"
+            android:textColor="#770000aa" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/save_safenum"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/buttonpressed_selector"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="保存安全号码设置"
+        android:textColor="#770000aa" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="10dp" >
+
+        <ImageView style="@style/off" />
+
+        <ImageView style="@style/off" />
+
+        <ImageView style="@style/on" />
+
+        <ImageView style="@style/off" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <TextView
+            android:id="@+id/perior_three"
+            style="@style/Prev_btn"
+            android:background="@drawable/buttonpressed_selector"
+            android:text="上一步" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/setup3" />
+
+        <TextView
+            android:id="@+id/next_three"
+            style="@style/Next_btn"
+            android:background="@drawable/buttonpressed_selector"
+            android:text="下一步" />
+    </RelativeLayout>
+
+</LinearLayout>

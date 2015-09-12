@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.example.mobilesafe"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        style="@style/TitleBarStyle"
+        android:text="恭喜您，设置完成" />
+
+    <com.example.splash.SettingRelativeLayout
+        android:id="@+id/derectfour_sr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="130dp"
+        app:desc_off="防盗保护没有开启"
+        app:desc_on="防盗保已经开启"
+        app:title="防盗保护" >
+    </com.example.splash.SettingRelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="10dp" >
+
+        <ImageView style="@style/off" />
+
+        <ImageView style="@style/off" />
+
+        <ImageView style="@style/off" />
+
+        <ImageView style="@style/on" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <TextView
+            android:id="@+id/perior_four"
+            style="@style/Prev_btn"
+            android:background="@drawable/buttonpressed_selector"
+            android:text="上一步" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/setup3" />
+
+        <TextView
+            android:id="@+id/setting_finish"
+            style="@style/Next_btn"
+            android:background="@drawable/buttonpressed_selector"
+            android:text="完成设置" />
+    </RelativeLayout>
+
+</LinearLayout>

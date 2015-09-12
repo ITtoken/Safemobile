@@ -2,34 +2,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/welcome_page" >
+    android:background="@drawable/splashanim" >
 
-    <TextView
-        android:id="@+id/tv_welcome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:textColor="#ffffff" />
+    <RelativeLayout
+        android:id="@+id/rl_anim"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/splashanim" >
 
-    <ProgressBar
-        android:id="@+id/pb"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_below="@id/tv_welcome"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="8dp" />
+        <TextView
+            android:id="@+id/tv_welcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="#ffffff" />
 
-    <TextView
-        android:id="@+id/tv_downstat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/pb"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="40dp"
-        android:background="#33000000"
-        android:padding="3dp"
-        android:textColor="#ffffff"
-        android:textSize="10sp"
-        android:visibility="gone" />
+        <ProgressBar
+            android:id="@+id/pb"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_below="@id/tv_welcome"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/tv_downstat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pb"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="40dp"
+            android:background="#33000000"
+            android:padding="3dp"
+            android:textColor="#ffffff"
+            android:textSize="10sp"
+            android:visibility="gone" />
+    </RelativeLayout>
 
 </RelativeLayout>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    		  xmlns:selfid="http://schemas.android.com/apk/res/com.example.mobilesafe"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        style="@style/TitleBarStyle"
+        android:text="设置中心" />
+
+   <com.example.splash.SettingRelativeLayout 
+       android:id="@+id/sr"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       selfid:title="自动更新设置"
+       selfid:desc_on="自动更新已开启"
+       selfid:desc_off="自动更新已关闭"
+       ></com.example.splash.SettingRelativeLayout>
+
+</LinearLayout>

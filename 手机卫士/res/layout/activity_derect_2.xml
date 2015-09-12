@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:selfid="http://schemas.android.com/apk/res/com.example.mobilesafe"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        style="@style/TitleBarStyle"
+        android:text="手机卡绑定" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="通过绑定SIM卡："
+        android:textSize="20dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="下次重启手机时,如果发现SIM卡发生变化,就会发送报警短信"
+        android:textSize="20dp" />
+
+    <TextView style="@style/GapLine" />
+
+    <com.example.splash.SettingRelativeLayout
+        android:id="@+id/drect2_sr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        selfid:desc_off="SIM卡没有绑定"
+        selfid:desc_on="SIM卡已经绑定"
+        selfid:title="点击绑定SIM卡" >
+    </com.example.splash.SettingRelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="10dp" >
+
+        <ImageView style="@style/off" />
+
+        <ImageView style="@style/on" />
+
+        <ImageView style="@style/off" />
+
+        <ImageView style="@style/off" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <TextView
+            android:id="@+id/perior_two"
+            style="@style/Prev_btn"
+            android:text="上一步"
+            android:background="@drawable/buttonpressed_selector"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/setup2" />
+
+        <TextView
+            android:id="@+id/next_two"
+            style="@style/Next_btn"
+            android:text="下一步"
+            android:background="@drawable/buttonpressed_selector" />
+    </RelativeLayout>
+
+</LinearLayout>

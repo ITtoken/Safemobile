@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        style="@style/TitleBarStyle"
+        android:text="首次使用设置" />
+
+    <TextView
+        android:id="@+id/start_devicemanager"
+        android:layout_width="221dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/buttonpressed_selector"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="激活设备管理器"
+        android:textColor="#77000077" />
+
+    <TextView
+        android:id="@+id/unstaller"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/buttonpressed_selector"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="卸载一键锁屏"
+        android:textColor="#77000077" />
+
+    <TextView
+        android:id="@+id/wipedata"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/buttonpressed_selector"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="清除数据"
+        android:textColor="#77000077" />
+
+</LinearLayout>

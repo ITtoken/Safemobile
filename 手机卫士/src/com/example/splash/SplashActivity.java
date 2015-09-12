@@ -21,12 +21,14 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +40,7 @@ import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 
-public class WelcomView extends Activity {
+public class SplashActivity extends Activity {
 	protected static final int UPDATE_DIALOG = 0;
 	protected static final int URL_EXCEPTION = 1;
 	protected static final int INTERNET_EXCEPTION = 2;
@@ -68,17 +70,17 @@ public class WelcomView extends Activity {
 				showUpdateDialog();
 				break;
 			case URL_EXCEPTION:// url异常提示
-				Toast.makeText(WelcomView.this, "请求资源不存在", Toast.LENGTH_SHORT)
+				Toast.makeText(SplashActivity.this, "请求资源不存在", Toast.LENGTH_SHORT)
 						.show();
 				goToMainActivity();
 				break;
 			case INTERNET_EXCEPTION:// 网络异常提示
-				Toast.makeText(WelcomView.this, "网络链接异常", Toast.LENGTH_SHORT)
+				Toast.makeText(SplashActivity.this, "网络链接异常", Toast.LENGTH_SHORT)
 						.show();
 				goToMainActivity();
 				break;
 			case JSON_EXCEPTION:// 获取json数据异常
-				Toast.makeText(WelcomView.this, "数据请求失败", Toast.LENGTH_SHORT)
+				Toast.makeText(SplashActivity.this, "数据请求失败", Toast.LENGTH_SHORT)
 						.show();
 				goToMainActivity();
 				break;
@@ -87,24 +89,30 @@ public class WelcomView extends Activity {
 		}
 	};
 	private SharedPreferences pref;
+	private RelativeLayout rl_anim;
+	private AnimationDrawable ad;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
 
-		pref = getSharedPreferences("update_stat", MODE_PRIVATE); 
+		pref = getSharedPreferences("appinfo", MODE_PRIVATE);
 		tv_welcome = (TextView) findViewById(R.id.tv_welcome);
 		tv_welcome.setText("版本号：" + getVersionName());
 		tv_downStat = (TextView) findViewById(R.id.tv_downstat);
+		rl_anim = (RelativeLayout) findViewById(R.id.rl_anim);
+		rl_anim.setBackgroundResource(R.drawable.splashanim);
+		ad = (AnimationDrawable) rl_anim.getBackground();
+		ad.start();
 
 		boolean stat = pref.getBoolean("stat", true);
-		if(stat){
-			getUpdateInfo();//检查更新APP并更新
-		}else{
+		if (stat) {
+			getUpdateInfo();// 检查更新APP并更新
+		} else {
 			goToMainActivity();
 		}
-		
+
 	}
 
 	/**
@@ -114,11 +122,9 @@ public class WelcomView extends Activity {
 		new Thread() {
 			private Message msg;
 			private HttpURLConnection conn;
-			private Date date = new Date();
 
 			public void run() {
 				try {
-					long currentTime = date.getTime();
 					msg = handler.obtainMessage();
 
 					URL url = new URL("http://10.100.0.173/update.json");
@@ -143,32 +149,21 @@ public class WelcomView extends Activity {
 
 							msg.what = UPDATE_DIALOG;
 						} else {
-							long nowTime = date.getTime();
-							long time = nowTime - currentTime;
-							if (time < 2000) {
-								try {
-									Thread.sleep(2000 - time);
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-								}
 								msg.what = NO_UPDATE;
-
 							}
 						}
-
-					}
-				} catch (MalformedURLException e) {
+				} catch (MalformedURLException e1) {
 					// url异常
 					msg.what = URL_EXCEPTION;
-					e.printStackTrace();
+					e1.printStackTrace();
 				} catch (IOException e) {
 					// 网络链接异常
 					msg.what = INTERNET_EXCEPTION;
 					e.printStackTrace();
-				} catch (JSONException e) {
+				} catch (JSONException e11) {
 					// json数据获取异常
 					msg.what = JSON_EXCEPTION;
-					e.printStackTrace();
+					e11.printStackTrace();
 				} finally {
 					handler.sendMessage(msg);
 					conn.disconnect();
@@ -179,6 +174,7 @@ public class WelcomView extends Activity {
 
 	/**
 	 * 获取版本名
+	 * 
 	 * @return
 	 */
 	public String getVersionName() {
@@ -265,7 +261,7 @@ public class WelcomView extends Activity {
 							public void onSuccess(ResponseInfo<File> arg0) {
 								// tv_downStat.setVisibility(View.GONE);//
 								// 设置为不可见
-								Toast.makeText(WelcomView.this, "下载成功",
+								Toast.makeText(SplashActivity.this, "下载成功",
 										Toast.LENGTH_SHORT).show();
 								// 启动安装程序
 								Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -283,7 +279,7 @@ public class WelcomView extends Activity {
 						});
 			}
 		} else {
-			Toast.makeText(WelcomView.this, "SD卡未找到", Toast.LENGTH_SHORT)
+			Toast.makeText(SplashActivity.this, "SD卡未找到", Toast.LENGTH_SHORT)
 					.show();
 			goToMainActivity();
 		}
@@ -301,7 +297,7 @@ public class WelcomView extends Activity {
 	 * 进入主界面
 	 */
 	public void goToMainActivity() {
-		Intent intent = new Intent(WelcomView.this, MainActivity.class);
+		Intent intent = new Intent(SplashActivity.this, MainActivity.class);
 		startActivity(intent);
 		finish();
 	}
