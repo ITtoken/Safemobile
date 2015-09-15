@@ -1,7 +1,5 @@
 package com.example.useractivity;
 
-import com.example.mobilesafe.R;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +7,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+
+import com.example.mobilesafe.R;
+import com.example.utils.AppConst;
 
 /**
  * 不需要界面展示的Activity，所以不需要再manifest文件中注册
@@ -25,7 +26,7 @@ public abstract class BaseDerectActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		prefer = getSharedPreferences("appinfo", MODE_PRIVATE);
+		prefer = getSharedPreferences(AppConst.APPINFO, MODE_PRIVATE);
 
 		gd = new GestureDetector(this,
 				new GestureDetector.SimpleOnGestureListener() {

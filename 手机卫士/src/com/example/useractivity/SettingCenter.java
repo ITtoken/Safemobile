@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.mobilesafe.R;
 import com.example.splash.SettingRelativeLayout;
+import com.example.utils.AppConst;
 
 public class SettingCenter extends Activity {
 	private SettingRelativeLayout sr;
@@ -22,7 +23,7 @@ public class SettingCenter extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settingcenter);
 
-		pref = getSharedPreferences("appinfo", MODE_PRIVATE);
+		pref = getSharedPreferences(AppConst.APPINFO, MODE_PRIVATE);
 		boolean stat = pref.getBoolean("stat", true);
 		
 		sr = (SettingRelativeLayout) findViewById(R.id.sr);

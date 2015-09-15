@@ -11,7 +11,8 @@ public class ExitDialogTip {
 
 	public static void alertExitTip(final Activity activity) {
 
-		pref = activity.getSharedPreferences("appinfo", Activity.MODE_PRIVATE);
+		pref = activity.getSharedPreferences(AppConst.APPINFO,
+				Activity.MODE_PRIVATE);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 		AlertDialog dialog = builder.create();

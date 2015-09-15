@@ -11,6 +11,7 @@ import android.text.TextUtils;
 
 import com.example.mobilesafe.R;
 import com.example.service.LocationService;
+import com.example.utils.AppConst;
 import com.example.utils.MUtils;
 
 public class SmsReceiver extends BroadcastReceiver {
@@ -18,7 +19,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		pre = context.getSharedPreferences("appinfo", Context.MODE_PRIVATE);
+		pre = context.getSharedPreferences(AppConst.APPINFO, Context.MODE_PRIVATE);
 		
 		Bundle bundle = intent.getExtras();
 		Object[] object = (Object[]) bundle.get("pdus");

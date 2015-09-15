@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Date;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,6 +33,7 @@ import android.widget.Toast;
 
 import com.example.mobilesafe.R;
 import com.example.useractivity.MainActivity;
+import com.example.utils.AppConst;
 import com.example.utils.In2Out;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -41,12 +41,6 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 
 public class SplashActivity extends Activity {
-	protected static final int UPDATE_DIALOG = 0;
-	protected static final int URL_EXCEPTION = 1;
-	protected static final int INTERNET_EXCEPTION = 2;
-	protected static final int JSON_EXCEPTION = 3;
-	protected static final int NO_UPDATE = 4;
-
 	private TextView tv_welcome;
 	private TextView tv_downStat;
 	private String vn;// 本地获取的版本名
@@ -58,46 +52,45 @@ public class SplashActivity extends Activity {
 	private int versionCode;
 	private String description;
 	private String downloadURL;
+	private SharedPreferences pref;
+	private RelativeLayout rl_anim;
+	private AnimationDrawable ad;
 
 	private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
-			case NO_UPDATE:// 已是最新版本，无需更新（直接进入主界面）
+			case AppConst.NO_UPDATE:// 已是最新版本，无需更新（直接进入主界面）
 				goToMainActivity();
 				break;
-			case UPDATE_DIALOG:
-				// 弹出更新对话框
+			case AppConst.UPDATE_DIALOG:// 弹出更新对话框
 				showUpdateDialog();
 				break;
-			case URL_EXCEPTION:// url异常提示
-				Toast.makeText(SplashActivity.this, "请求资源不存在", Toast.LENGTH_SHORT)
-						.show();
+			case AppConst.URL_EXCEPTION:// url异常提示
+				Toast.makeText(SplashActivity.this, "请求资源不存在",
+						Toast.LENGTH_SHORT).show();
 				goToMainActivity();
 				break;
-			case INTERNET_EXCEPTION:// 网络异常提示
-				Toast.makeText(SplashActivity.this, "网络链接异常", Toast.LENGTH_SHORT)
-						.show();
+			case AppConst.INTERNET_EXCEPTION:// 网络异常提示
+				Toast.makeText(SplashActivity.this, "网络链接异常",
+						Toast.LENGTH_SHORT).show();
 				goToMainActivity();
 				break;
-			case JSON_EXCEPTION:// 获取json数据异常
-				Toast.makeText(SplashActivity.this, "数据请求失败", Toast.LENGTH_SHORT)
-						.show();
+			case AppConst.JSON_EXCEPTION:// 获取json数据异常
+				Toast.makeText(SplashActivity.this, "数据请求失败",
+						Toast.LENGTH_SHORT).show();
 				goToMainActivity();
 				break;
 
 			}
 		}
 	};
-	private SharedPreferences pref;
-	private RelativeLayout rl_anim;
-	private AnimationDrawable ad;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
 
-		pref = getSharedPreferences("appinfo", MODE_PRIVATE);
+		pref = getSharedPreferences(AppConst.APPINFO, MODE_PRIVATE);
 		tv_welcome = (TextView) findViewById(R.id.tv_welcome);
 		tv_welcome.setText("版本号：" + getVersionName());
 		tv_downStat = (TextView) findViewById(R.id.tv_downstat);
@@ -112,7 +105,6 @@ public class SplashActivity extends Activity {
 		} else {
 			goToMainActivity();
 		}
-
 	}
 
 	/**
@@ -120,13 +112,12 @@ public class SplashActivity extends Activity {
 	 */
 	private void getUpdateInfo() {
 		new Thread() {
-			private Message msg;
 			private HttpURLConnection conn;
+			private Message msg;
 
 			public void run() {
+				msg = handler.obtainMessage();
 				try {
-					msg = handler.obtainMessage();
-
 					URL url = new URL("http://10.100.0.173/update.json");
 					conn = (HttpURLConnection) url.openConnection();
 					conn.setRequestMethod("GET");
@@ -147,23 +138,26 @@ public class SplashActivity extends Activity {
 							downloadURL = (String) json.get("downloadURL");// 获取新版本下载URL
 							aPPName = (String) json.get("APPName");
 
-							msg.what = UPDATE_DIALOG;
+							msg.what = AppConst.UPDATE_DIALOG;
 						} else {
-								msg.what = NO_UPDATE;
-							}
+							Thread.sleep(2000);
+							msg.what = AppConst.NO_UPDATE;
 						}
+					}
 				} catch (MalformedURLException e1) {
 					// url异常
-					msg.what = URL_EXCEPTION;
+					msg.what = AppConst.URL_EXCEPTION;
 					e1.printStackTrace();
 				} catch (IOException e) {
 					// 网络链接异常
-					msg.what = INTERNET_EXCEPTION;
+					msg.what = AppConst.INTERNET_EXCEPTION;
 					e.printStackTrace();
 				} catch (JSONException e11) {
 					// json数据获取异常
-					msg.what = JSON_EXCEPTION;
+					msg.what = AppConst.JSON_EXCEPTION;
 					e11.printStackTrace();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				} finally {
 					handler.sendMessage(msg);
 					conn.disconnect();

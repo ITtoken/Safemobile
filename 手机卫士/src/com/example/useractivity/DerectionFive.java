@@ -1,8 +1,6 @@
 package com.example.useractivity;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.listener.BtnTouchListener;
 import com.example.mobilesafe.R;
+import com.example.utils.AppConst;
 import com.example.utils.ExitDialogTip;
 
 public class DerectionFive extends Activity implements OnClickListener {
@@ -30,7 +29,7 @@ public class DerectionFive extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_derect_5);
 
-		preferences = getSharedPreferences("appinfo", MODE_PRIVATE);
+		preferences = getSharedPreferences(AppConst.APPINFO, MODE_PRIVATE);
 		boolean protect = preferences.getBoolean("protect", false);
 
 		reset = (TextView) findViewById(R.id.reset);

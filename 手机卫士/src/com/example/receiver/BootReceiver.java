@@ -5,17 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.telephony.TelephonyManager;
-import android.telephony.gsm.SmsManager;
 import android.text.TextUtils;
 
+import com.example.utils.AppConst;
+import com.example.utils.FileInstance;
 import com.example.utils.MUtils;
 
 public class BootReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		SharedPreferences preferences = context.getSharedPreferences(
-				"appinfo", Context.MODE_PRIVATE);
+		SharedPreferences preferences = FileInstance.getPref(context);
 		String sim = preferences.getString("sim", null);/*
 														 * 获取之前旧的SIM卡的序列号,
 														 * 如果为null说明没有绑定SIM卡

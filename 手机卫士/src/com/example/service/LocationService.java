@@ -11,6 +11,8 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 
+import com.example.utils.AppConst;
+
 public class LocationService extends Service {
 
 	private SharedPreferences pref;
@@ -23,7 +25,7 @@ public class LocationService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		pref = getSharedPreferences("appinfo", MODE_PRIVATE);
+		pref = getSharedPreferences(AppConst.APPINFO, MODE_PRIVATE);
 		/* GPS×·×Ù */
 		LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		Criteria criteria = new Criteria();
