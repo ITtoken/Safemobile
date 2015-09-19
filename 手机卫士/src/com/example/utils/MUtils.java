@@ -4,11 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Bundle;
 import android.telephony.gsm.SmsManager;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -58,7 +53,7 @@ public class MUtils {
 						/* 输入的验证码和发送给安全号码的验证码为同一验证码，否则不能更改安全号码 */
 
 						String input_vc = et_validCode.getText().toString();
-						pref = context.getSharedPreferences("appinfo",
+						pref = context.getSharedPreferences(AppConst.APPINFO,
 								Context.MODE_PRIVATE);
 						String validCode = pref.getString("validCode", null);
 						if (MD5Utils.encodingMD5(input_vc).equals(validCode)) {
@@ -98,4 +93,6 @@ public class MUtils {
 		sm.sendTextMessage(descAddress, null, text, null, null);
 	}
 	
+	
+
 }

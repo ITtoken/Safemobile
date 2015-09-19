@@ -4,9 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class FileInstance {
-	private static FileInstance fi = new FileInstance();
 	private static SharedPreferences pref;
-
 	private FileInstance() {
 	}
 

@@ -62,7 +62,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#770000aa"
+        android:background="@drawable/titlebar_style"
         android:padding="5dp"
         android:text="功能简介"
         android:textColor="#ffffff"

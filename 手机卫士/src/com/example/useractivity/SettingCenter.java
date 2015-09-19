@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.mobilesafe.R;
 import com.example.splash.SettingRelativeLayout;
 import com.example.utils.AppConst;
+import com.example.utils.FileInstance;
 
 public class SettingCenter extends Activity {
 	private SettingRelativeLayout sr;
@@ -23,9 +24,9 @@ public class SettingCenter extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settingcenter);
 
-		pref = getSharedPreferences(AppConst.APPINFO, MODE_PRIVATE);
+		pref = FileInstance.getPref(this);
 		boolean stat = pref.getBoolean("stat", true);
-		
+
 		sr = (SettingRelativeLayout) findViewById(R.id.sr);
 		cb = (CheckBox) sr.findViewById(R.id.cb);
 		desc = (TextView) sr.findViewById(R.id.desc);

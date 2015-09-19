@@ -21,7 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mobilesafe.R;
-import com.example.utils.AppConst;
+import com.example.utils.FileInstance;
 import com.example.utils.MD5Utils;
 
 public class MainActivity extends Activity {
@@ -45,7 +45,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		preferences = getSharedPreferences(AppConst.APPINFO, MODE_PRIVATE);
+		preferences = FileInstance.getPref(this);
 		gv_item = (GridView) findViewById(R.id.gv_item);
 		gv_item.setAdapter(new GvAdapter());
 		gv_item.setOnItemClickListener(new OnItemClickListener() {
@@ -57,8 +57,9 @@ public class MainActivity extends Activity {
 					alertPasswordDialog();
 					break;
 				case R.drawable.home_callmsgsafe:// 通讯卫士
-					Toast.makeText(MainActivity.this, "此模块还未开放",
-							Toast.LENGTH_SHORT).show();
+					Intent intent_callsafe = new Intent(MainActivity.this,
+							BlackContacterActivity.class);
+					startActivity(intent_callsafe);
 					break;
 				case R.drawable.home_apps:// 软件管理
 					Toast.makeText(MainActivity.this, "此模块还未开放",
@@ -113,15 +114,30 @@ public class MainActivity extends Activity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			View view = View.inflate(MainActivity.this,
-					R.layout.item_gridview, null);
-			TextView tv_item = (TextView) view.findViewById(R.id.tv_item);
-			ImageView iv_item = (ImageView) view.findViewById(R.id.iv_item);
-			tv_item.setText(strs[position]);
-			iv_item.setBackgroundResource(ids[position]);
+			View view = null;
+			ViewHolder vh = new ViewHolder();
+			if (convertView != null) {
+				view = convertView;
+				vh = (ViewHolder) view.getTag();
+			} else {
+				view = View.inflate(MainActivity.this, R.layout.item_gridview,
+						null);
+				vh.tv_item = (TextView) view.findViewById(R.id.tv_item);
+				vh.iv_item = (ImageView) view.findViewById(R.id.iv_item);
+				view.setTag(vh);
+			}
+
+			vh.tv_item.setText(strs[position]);
+			vh.iv_item.setBackgroundResource(ids[position]);
 			return view;
 		}
 
+	}
+
+	/* ViewHolder初始化 */
+	class ViewHolder {
+		public TextView tv_item;
+		public ImageView iv_item;
 	}
 
 	private void exitTip() {
@@ -177,12 +193,15 @@ public class MainActivity extends Activity {
 							firstPass(inputpassword, inputpassword.length()))
 							.equals(password)) {
 						// 密码正确，跳转到安全设置界面
-						
-						boolean settingfinish = preferences.getBoolean("settingfinish", false);
-						if(settingfinish){
-							startActivity(new Intent(MainActivity.this,DerectionFive.class));
-						}else{
-							startActivity(new Intent(MainActivity.this,DerectionOne.class));
+
+						boolean settingfinish = preferences.getBoolean(
+								"settingfinish", false);
+						if (settingfinish) {
+							startActivity(new Intent(MainActivity.this,
+									DerectionFive.class));
+						} else {
+							startActivity(new Intent(MainActivity.this,
+									DerectionOne.class));
 						}
 						dialog.dismiss();
 					} else {
@@ -220,9 +239,6 @@ public class MainActivity extends Activity {
 				.findViewById(R.id.et_password);
 		final EditText et_confirm_password = (EditText) view
 				.findViewById(R.id.et_confirm_password);
-
-		final String pass = et_password.getText().toString();
-		final String confirm_pass = et_confirm_password.getText().toString();
 
 		Button btn_ok = (Button) view.findViewById(R.id.btn_ok);
 		btn_ok.setOnClickListener(new android.view.View.OnClickListener() {

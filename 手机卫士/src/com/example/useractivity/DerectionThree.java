@@ -9,7 +9,6 @@ import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.listener.BtnTouchListener;
 import com.example.mobilesafe.R;
 import com.example.utils.ExitDialogTip;
 import com.example.utils.MD5Utils;
@@ -35,14 +34,9 @@ public class DerectionThree extends BaseDerectActivity implements
 		save_safenum = (TextView) findViewById(R.id.save_safenum);
 
 		perior_three.setOnClickListener(this);
-		perior_three.setOnTouchListener(new BtnTouchListener(perior_three));
 		next_three.setOnClickListener(this);
-		next_three.setOnTouchListener(new BtnTouchListener(next_three));
 		chose_contacter.setOnClickListener(this);
-		chose_contacter
-				.setOnTouchListener(new BtnTouchListener(chose_contacter));
 		save_safenum.setOnClickListener(this);
-		save_safenum.setOnTouchListener(new BtnTouchListener(save_safenum));
 
 		String safeNum = prefer.getString("safenum", null);
 		if (!TextUtils.isEmpty(safeNum)) {
@@ -64,13 +58,19 @@ public class DerectionThree extends BaseDerectActivity implements
 			showPrevPage(this, DerectionTwo.class);
 			break;
 		case R.id.next_three:
-			showNextPage(this, DerectionFour.class);
+			String safeNum = prefer.getString("safenum", null);
+			if (!TextUtils.isEmpty(safeNum)) {
+				showNextPage(this, DerectionFour.class);
+			} else {
+				new MUtils(this).printToast("安全号码未设置");
+			}
+
 			break;
 		case R.id.chose_contanceter:
-//			 Intent intent = new Intent(this, ContactList.class);
-//			 startActivity(intent);
-//			 overridePendingTransition(R.anim.transeanim_left_coming,
-//			 R.anim.transeanim_left_now);
+			// Intent intent = new Intent(this, ContactList.class);
+			// startActivity(intent);
+			// overridePendingTransition(R.anim.transeanim_left_coming,
+			// R.anim.transeanim_left_now);
 			new MUtils(this).printToast("选择联系人");
 			break;
 		case R.id.save_safenum:

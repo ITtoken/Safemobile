@@ -10,10 +10,9 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.listener.BtnTouchListener;
 import com.example.mobilesafe.R;
-import com.example.utils.AppConst;
 import com.example.utils.ExitDialogTip;
+import com.example.utils.FileInstance;
 
 public class DerectionFive extends Activity implements OnClickListener {
 
@@ -29,7 +28,7 @@ public class DerectionFive extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_derect_5);
 
-		preferences = getSharedPreferences(AppConst.APPINFO, MODE_PRIVATE);
+		preferences = FileInstance.getPref(this);
 		boolean protect = preferences.getBoolean("protect", false);
 
 		reset = (TextView) findViewById(R.id.reset);
@@ -37,9 +36,7 @@ public class DerectionFive extends Activity implements OnClickListener {
 		show_safeNum = (TextView) findViewById(R.id.show_safenum);
 
 		reset.setOnClickListener(this);
-		reset.setOnTouchListener(new BtnTouchListener(reset));
 		exit_setting.setOnClickListener(this);
-		exit_setting.setOnTouchListener(new BtnTouchListener(exit_setting));
 		lock_stat = (ImageView) findViewById(R.id.lock_stat);
 		stat_desc = (TextView) findViewById(R.id.stat_desc);
 
@@ -74,7 +71,7 @@ public class DerectionFive extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.reset:
-			startActivity(new Intent(this, DerectionOne.class));
+			startActivity(new Intent(DerectionFive.this, DerectionOne.class));
 			overridePendingTransition(R.anim.alphaanim_coming,
 					R.anim.alphaanim_now);
 			finish();

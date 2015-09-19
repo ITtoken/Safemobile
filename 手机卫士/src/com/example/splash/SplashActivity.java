@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.example.mobilesafe.R;
 import com.example.useractivity.MainActivity;
 import com.example.utils.AppConst;
+import com.example.utils.FileInstance;
 import com.example.utils.In2Out;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -90,7 +91,7 @@ public class SplashActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
 
-		pref = getSharedPreferences(AppConst.APPINFO, MODE_PRIVATE);
+		pref = FileInstance.getPref(this);
 		tv_welcome = (TextView) findViewById(R.id.tv_welcome);
 		tv_welcome.setText("°æ±¾ºÅ£º" + getVersionName());
 		tv_downStat = (TextView) findViewById(R.id.tv_downstat);

@@ -1,13 +1,11 @@
 package com.example.useractivity;
 
-import android.R.bool;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import com.example.listener.BtnTouchListener;
 import com.example.mobilesafe.R;
 import com.example.splash.SettingRelativeLayout;
 import com.example.utils.ExitDialogTip;
@@ -35,9 +33,7 @@ public class DerectionFour extends BaseDerectActivity implements
 		sr.setDefaultStat(false);
 
 		perior_four.setOnClickListener(this);
-		perior_four.setOnTouchListener(new BtnTouchListener(perior_four));
 		setting_finish.setOnClickListener(this);
-		setting_finish.setOnTouchListener(new BtnTouchListener(setting_finish));
 		sr.setOnClickListener(this);
 
 		protect_stat = prefer.getBoolean("protect", false);

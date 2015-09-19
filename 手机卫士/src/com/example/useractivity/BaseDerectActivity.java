@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 
 import com.example.mobilesafe.R;
 import com.example.utils.AppConst;
+import com.example.utils.FileInstance;
 
 /**
  * 不需要界面展示的Activity，所以不需要再manifest文件中注册
@@ -25,17 +26,14 @@ public abstract class BaseDerectActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		prefer = getSharedPreferences(AppConst.APPINFO, MODE_PRIVATE);
+
+		prefer = FileInstance.getPref(this);
 
 		gd = new GestureDetector(this,
 				new GestureDetector.SimpleOnGestureListener() {
 					/**
-					 * 当手指滑动屏幕是调用
-					 *  e1：手指在屏幕上开始滑动的点的坐标
-					 *  e2：手指在屏幕上滑动结束的点的坐标
-					 * velocityX：手指的屏幕上的X轴滑动的速度 
-					 * velocityY：手指在屏幕上的Y轴话滑动的速度
+					 * 当手指滑动屏幕是调用 e1：手指在屏幕上开始滑动的点的坐标 e2：手指在屏幕上滑动结束的点的坐标
+					 * velocityX：手指的屏幕上的X轴滑动的速度 velocityY：手指在屏幕上的Y轴话滑动的速度
 					 */
 					@Override
 					public boolean onFling(MotionEvent e1, MotionEvent e2,

@@ -7,9 +7,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.listener.BtnTouchListener;
 import com.example.mobilesafe.R;
 import com.example.splash.SettingRelativeLayout;
 import com.example.utils.ExitDialogTip;
@@ -35,9 +33,7 @@ public class DerectionTwo extends BaseDerectActivity implements OnClickListener 
 		next_two = (TextView) findViewById(R.id.next_two);
 
 		perior_two.setOnClickListener(this);
-		perior_two.setOnTouchListener(new BtnTouchListener(perior_two));
 		next_two.setOnClickListener(this);
-		next_two.setOnTouchListener(new BtnTouchListener(next_two));
 		drect2_sr.setOnClickListener(this);
 
 		drect2_sr.setDefaultStat(false);
@@ -63,7 +59,13 @@ public class DerectionTwo extends BaseDerectActivity implements OnClickListener 
 			showPrevPage(this, DerectionOne.class);
 			break;
 		case R.id.next_two:
-			showNextPage(this, DerectionThree.class);
+			String sim = prefer.getString("sim", null);
+			if (!TextUtils.isEmpty(sim)) {
+				showNextPage(this, DerectionThree.class);
+			} else {
+				new MUtils(this).printToast("SIM¿¨Î´°ó¶¨");
+			}
+
 			break;
 		case R.id.drect2_sr:
 			switch (tm.getSimState()) {

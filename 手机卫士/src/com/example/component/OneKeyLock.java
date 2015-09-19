@@ -9,10 +9,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.listener.BtnTouchListener;
 import com.example.mobilesafe.R;
 import com.example.utils.MUtils;
 
@@ -42,11 +40,8 @@ public class OneKeyLock extends Activity implements OnClickListener {
 		unstall = (TextView) findViewById(R.id.unstaller);
 		wipedata = (TextView) findViewById(R.id.wipedata);
 		startManager.setOnClickListener(this);
-		startManager.setOnTouchListener(new BtnTouchListener(startManager));
 		unstall.setOnClickListener(this);
-		unstall.setOnTouchListener(new BtnTouchListener(unstall));
 		wipedata.setOnClickListener(this);
-		wipedata.setOnTouchListener(new BtnTouchListener(wipedata));
 
 	}
 
