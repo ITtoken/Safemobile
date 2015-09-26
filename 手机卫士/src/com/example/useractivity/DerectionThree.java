@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -13,6 +15,7 @@ import com.example.mobilesafe.R;
 import com.example.utils.ExitDialogTip;
 import com.example.utils.MD5Utils;
 import com.example.utils.MUtils;
+import com.example.utils.ShakeUtils;
 
 public class DerectionThree extends BaseDerectActivity implements
 		OnClickListener {
@@ -62,6 +65,9 @@ public class DerectionThree extends BaseDerectActivity implements
 			if (!TextUtils.isEmpty(safeNum)) {
 				showNextPage(this, DerectionFour.class);
 			} else {
+				/* 添加震动效果 */
+				ShakeUtils.shakeAnim(this, et_safeNum);
+				ShakeUtils.deviceShake(this);
 				new MUtils(this).printToast("安全号码未设置");
 			}
 
@@ -104,6 +110,8 @@ public class DerectionThree extends BaseDerectActivity implements
 					prefer.edit().putBoolean("changenum", true).commit();/* 状态变为更换安全号码 */
 					new MUtils(this).printToast("安全号码设置成功");
 				} else {
+					ShakeUtils.shakeAnim(this, et_safeNum);
+					ShakeUtils.deviceShake(this);
 					new MUtils(this).printToast("请输入安全号码");
 				}
 			}

@@ -22,7 +22,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		/* 初始化黑名单表 */
+		/*初始化黑名单表 */
 		db.execSQL("create table blacksheet(id integer primary key,telnum varchar(20));");
 
 	}

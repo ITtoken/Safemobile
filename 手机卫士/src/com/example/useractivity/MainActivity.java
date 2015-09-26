@@ -82,8 +82,8 @@ public class MainActivity extends Activity {
 							Toast.LENGTH_SHORT).show();
 					break;
 				case R.drawable.home_tools:// 高级工具
-					Toast.makeText(MainActivity.this, "此模块还未开放",
-							Toast.LENGTH_SHORT).show();
+					startActivity(new Intent(MainActivity.this,
+							ToolsActivity.class));
 					break;
 				case R.drawable.home_settings:// 设置中心
 					Intent intent_setting = new Intent(MainActivity.this,

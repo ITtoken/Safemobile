@@ -56,4 +56,29 @@ public class In2Out {
 			e.printStackTrace();
 		}
 	}
+
+	/**
+	 * 文件复制
+	 * 
+	 * @param sourcePath
+	 *            文件源路径
+	 * @param destPath
+	 *            要复制的目标路径
+	 */
+	public static void fileCopy(InputStream in, String destPath) {
+		FileOutputStream out;
+		try {
+			out = new FileOutputStream(destPath);
+
+			byte[] buffer = new byte[1024];
+			int len = 0;
+			while ((len = in.read(buffer)) != -1) {
+				out.write(buffer, 0, len);
+			}
+			in.close();
+			out.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

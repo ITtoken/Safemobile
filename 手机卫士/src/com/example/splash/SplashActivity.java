@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -91,6 +92,7 @@ public class SplashActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
 
+		loadLocationLib();/* 导入归属地数据库 */
 		pref = FileInstance.getPref(this);
 		tv_welcome = (TextView) findViewById(R.id.tv_welcome);
 		tv_welcome.setText("版本号：" + getVersionName());
@@ -295,5 +297,20 @@ public class SplashActivity extends Activity {
 		Intent intent = new Intent(SplashActivity.this, MainActivity.class);
 		startActivity(intent);
 		finish();
+	}
+
+	/**
+	 * 加载归属地数据库
+	 */
+	private void loadLocationLib() {
+		try {
+			File file = new File(getFilesDir(), "address.db");
+			if (!file.exists()) {
+				In2Out.fileCopy(getAssets().open("address.db"), getFilesDir()
+						+ "/address.db");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -1,15 +1,16 @@
 package com.example.useractivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import android.animation.Animator;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.inputmethod.ExtractedText;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import com.example.dao.DBOperater;
 import com.example.mobilesafe.R;
 import com.example.utils.MUtils;
+import com.example.utils.ShakeUtils;
 
 public class BlackContacterActivity extends Activity implements OnClickListener {
 	private ListView lv_bc;
@@ -74,43 +76,34 @@ public class BlackContacterActivity extends Activity implements OnClickListener 
 		@Override
 		public View getView(final int position, View convertView,
 				ViewGroup parent) {
-			if (bc_contacters.size() == 0) {
-				TextView tv = new TextView(BlackContacterActivity.this);
-				tv.setText("还没有设置任何黑名单");
-				tv.setAlpha(0.1f);
-				tv.setTextSize(20f);
-				return tv;
+			View view = null;
+			ViewHolder vh = new ViewHolder();
+			if (convertView != null) {
+				view = convertView;
+				vh = (ViewHolder) view.getTag();
 			} else {
-				View view = null;
-				ViewHolder vh = new ViewHolder();
-				if (convertView != null) {
-					view = convertView;
-					vh = (ViewHolder) view.getTag();
-				} else {
-					view = View.inflate(BlackContacterActivity.this,
-							R.layout.item_bc, null);
-					vh.remove_bc = (Button) view.findViewById(R.id.remove_bc);
-					vh.tv = (TextView) view.findViewById(R.id.telnum);
-					view.setTag(vh);
-				}
-
-				vh.tv.setText(bc_contacters.get(position));
-				vh.remove_bc.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						/* 从黑名单中移除 */
-						/* 因为数据库默认从0开始增长，而list是从0开始的，所以+1 */
-						operater.delete(position + 1);
-						bc_contacters.remove(position);
-						operater.update(bc_contacters);
-						new MUtils(BlackContacterActivity.this)
-								.printToast("删除成功");
-						notifyDataSetChanged();
-					}
-				});
-				return view;
+				view = View.inflate(BlackContacterActivity.this,
+						R.layout.item_bc, null);
+				vh.remove_bc = (Button) view.findViewById(R.id.remove_bc);
+				vh.tv = (TextView) view.findViewById(R.id.telnum);
+				view.setTag(vh);
 			}
+
+			vh.tv.setText(bc_contacters.get(position));
+			vh.remove_bc.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					/* 从黑名单中移除 */
+					/* 因为数据库默认从0开始增长，而list是从0开始的，所以+1 */
+					operater.delete(position + 1);
+					bc_contacters.remove(position);
+					operater.update(bc_contacters);
+					new MUtils(BlackContacterActivity.this).printToast("删除成功");
+					notifyDataSetChanged();
+				}
+			});
+			return view;
 		}
 
 	}
@@ -121,10 +114,21 @@ public class BlackContacterActivity extends Activity implements OnClickListener 
 		case R.id.add_blackcontacter:
 			final String telenum = et_telenum.getText().toString();
 			if (!TextUtils.isEmpty(telenum)) {
-				operater.insert(telenum);
-				new MUtils(BlackContacterActivity.this).printToast("添加成功");
-				finish();
+				boolean exist = operater.queryFromTelnum(telenum);
+				if (exist) {
+					ShakeUtils.shakeAnim(this, et_telenum);
+					ShakeUtils.deviceShake(this);
+					new MUtils(BlackContacterActivity.this)
+							.printToast("此用户已存在黑名单中");
+				} else {
+					operater.insert(telenum);
+					new MUtils(BlackContacterActivity.this).printToast("添加成功");
+					finish();
+				}
 			} else {
+				/* 添加震动效果 */
+				ShakeUtils.shakeAnim(this, et_telenum);
+				ShakeUtils.deviceShake(this);
 				new MUtils(this).printToast("输入框不能为空");
 			}
 			break;

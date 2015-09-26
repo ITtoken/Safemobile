@@ -19,7 +19,10 @@
     <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -56,6 +59,10 @@
         </activity>
         <activity android:name="com.example.useractivity.BlackContacterActivity" >
         </activity>
+        <activity android:name="com.example.useractivity.ToolsActivity" >
+        </activity>
+        <activity android:name="com.example.useractivity.LocationShowActivity" >
+        </activity>
         <!-- 一键锁屏Activity -->
         <activity
             android:name="com.example.component.OneKeyLock"
@@ -81,8 +88,10 @@
             </intent-filter>
         </receiver>
         <receiver android:name="com.example.receiver.BlackContactsReceiver" >
-            <intent-filter>
+            <intent-filter android:priority="2147483647" >
                 <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+                <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
         </receiver>
         <receiver

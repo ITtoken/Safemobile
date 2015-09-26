@@ -64,6 +64,33 @@ public class DBOperater {
 	}
 
 	/**
+	 * 通过号码到数据库中查询
+	 * 
+	 * @param telnum
+	 *            按照那个号码查询
+	 * @return 如果数据库中有则返回true，否则返回false
+	 */
+	public boolean queryFromTelnum(String telnum) {
+		SQLiteDatabase db = dh.getWritableDatabase();
+		Cursor cursor = db.query("blacksheet", new String[] { "telnum" },
+				"telnum=?", new String[] { telnum }, null, null, null);
+		if (cursor != null && cursor.getColumnCount() > 0) {
+			while (cursor.moveToNext()) {
+				/* 遍历cursor中的telnul列数据 */
+				String dbTelnum = cursor.getString(0);
+				if (dbTelnum.equals(telnum)) {
+					/* 如果查到的号码和给定号码一致，说明存在，则关闭数据库并返回true */
+					db.close();
+					return true;
+				}
+			}
+		}
+		/* 否则返回false */
+		db.close();
+		return false;
+	}
+
+	/**
 	 * 查询数据库
 	 * 
 	 * @return 数据库中telnum信息封装后的list
@@ -80,8 +107,7 @@ public class DBOperater {
 			}
 			db.close();
 			return list;
-		} else {
-			return null;
 		}
+		return null;
 	}
 }
