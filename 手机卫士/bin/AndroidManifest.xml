@@ -23,6 +23,7 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -111,7 +112,8 @@
         <!-- Service注册 -->
 
         <service android:name="com.example.service.LocationService" >
+        </service><service android:name="com.example.service.CommingShowService" >
         </service>
-    </application>
+</application>
 
 </manifest>

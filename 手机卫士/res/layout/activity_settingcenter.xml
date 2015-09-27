@@ -13,8 +13,8 @@
         android:id="@+id/sr"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        selfid:desc_off="自动更新已关闭"
-        selfid:desc_on="自动更新已开启"
+        selfid:desc_off="关闭"
+        selfid:desc_on="开启"
         selfid:title="自动更新设置" >
     </com.example.splash.SettingRelativeLayout>
 
@@ -22,9 +22,18 @@
         android:id="@+id/location_show"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        selfid:desc_off="自动捕捉已关闭"
-        selfid:desc_on="自动捕捉已开启"
+        selfid:desc_off="关闭"
+        selfid:desc_on="开启"
         selfid:title="归属地查询自动捕捉" >
+    </com.example.splash.SettingRelativeLayout>
+    
+    <com.example.splash.SettingRelativeLayout
+        android:id="@+id/comming_show"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        selfid:desc_off="关闭"
+        selfid:desc_on="开启"
+        selfid:title="归属地来电显示" >
     </com.example.splash.SettingRelativeLayout>
 
 </LinearLayout>
