@@ -5,9 +5,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.telephony.gsm.SmsManager;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.mobilesafe.R;
 
 public class MUtils {
 	private Context context;
@@ -23,6 +27,25 @@ public class MUtils {
 	 */
 	public void printToast(String message) {
 		Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+	}
+
+	/**
+	 * 弹出一个具有自定义样式的Toast
+	 * 
+	 * @param message
+	 *            显示在吐司上的文本内容
+	 */
+	public void printStyleToast(String message) {
+		Toast toast = new Toast(context);
+		toast.setDuration(Toast.LENGTH_LONG);
+		/* 设置显示位置和位置偏移量 */
+		toast.setGravity(Gravity.TOP, 0, 30);
+		/* 填充Toast布局的背景 */
+		View view = View.inflate(context, R.layout.toast_background, null);
+		TextView toast_tv = (TextView) view.findViewById(R.id.toast_tv);
+		toast_tv.setText(message);
+		toast.setView(view);
+		toast.show();
 	}
 
 	/**
@@ -92,7 +115,5 @@ public class MUtils {
 		SmsManager sm = SmsManager.getDefault();
 		sm.sendTextMessage(descAddress, null, text, null, null);
 	}
-	
-	
 
 }

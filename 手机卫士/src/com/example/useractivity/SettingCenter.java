@@ -54,6 +54,7 @@ public class SettingCenter extends Activity implements OnClickListener {
 		desc_comming_show = (TextView) comming_show.findViewById(R.id.desc);
 		comming_show.setDefaultStat(commingshow_stat);
 		comming_show.setOnClickListener(this);
+
 	}
 
 	@Override
@@ -63,7 +64,7 @@ public class SettingCenter extends Activity implements OnClickListener {
 			if (cb.isChecked()) {
 				cb.setChecked(false);
 				desc.setText("关闭");
-				pref.edit().putBoolean("stat", false).commit();
+				pref.edit().remove("stat").commit();
 			} else {
 				cb.setChecked(true);
 				desc.setText("开启");
@@ -74,7 +75,7 @@ public class SettingCenter extends Activity implements OnClickListener {
 			if (cb_location.isChecked()) {
 				cb_location.setChecked(false);
 				desc_location.setText("关闭");
-				pref.edit().putBoolean("location_stat", false).commit();
+				pref.edit().remove("location_stat").commit();
 			} else {
 				cb_location.setChecked(true);
 				desc_location.setText("开启");
@@ -85,7 +86,7 @@ public class SettingCenter extends Activity implements OnClickListener {
 			if (cb_comming_show.isChecked()) {
 				cb_comming_show.setChecked(false);
 				desc_comming_show.setText("关闭");
-				pref.edit().putBoolean("commingshow_stat", false).commit();
+				pref.edit().remove("commingshow_stat").commit();
 				stopService(new Intent(this, CommingShowService.class));
 			} else {
 				cb_comming_show.setChecked(true);

@@ -6,11 +6,15 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Iterator;
+import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -26,13 +30,13 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mobilesafe.R;
+import com.example.service.CommingShowService;
 import com.example.useractivity.MainActivity;
 import com.example.utils.AppConst;
 import com.example.utils.FileInstance;
@@ -86,6 +90,7 @@ public class SplashActivity extends Activity {
 			}
 		}
 	};
+	private boolean commingshow_stat;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +113,41 @@ public class SplashActivity extends Activity {
 		} else {
 			goToMainActivity();
 		}
+
+		commingshow_stat = pref.getBoolean("commingshow_stat", false);
+		if (commingshow_stat) {
+			if (!checkServiceStat()) {
+				startService(new Intent(this, CommingShowService.class));
+			}
+		}
+	}
+
+	/**
+	 * 检查来电显示服务是否开启
+	 * 
+	 * @param commingshow_stat
+	 * @return
+	 */
+	private boolean checkServiceStat() {
+		ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+		List<RunningServiceInfo> list = am.getRunningServices(100);
+		Iterator<RunningServiceInfo> it = list.iterator();
+		String serviceTempName = null;
+		while (it.hasNext()) {
+			RunningServiceInfo next = it.next();
+			String serviceName = next.service.getShortClassName();
+			if (serviceName.equals("com.example.service.CommingShowService")) {
+				serviceTempName = serviceName;
+				break;
+			}
+		}
+
+		if (serviceTempName == null) {
+			return false;
+		}
+
+		return true;
+
 	}
 
 	/**
