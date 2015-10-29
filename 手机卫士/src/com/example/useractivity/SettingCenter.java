@@ -1,17 +1,22 @@
 package com.example.useractivity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.mobilesafe.R;
+import com.example.other.CenterTipActivity;
 import com.example.service.CommingShowService;
 import com.example.splash.SettingRelativeLayout;
+import com.example.utils.AppConst;
 import com.example.utils.FileInstance;
 
 public class SettingCenter extends Activity implements OnClickListener {
@@ -25,6 +30,10 @@ public class SettingCenter extends Activity implements OnClickListener {
 	private SettingRelativeLayout comming_show;
 	private CheckBox cb_comming_show;
 	private TextView desc_comming_show;
+	private LinearLayout commingstyle_change;
+	private TextView tv_showStyle;
+	private int whitch_selected;
+	private LinearLayout commingshow_location;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +41,8 @@ public class SettingCenter extends Activity implements OnClickListener {
 		setContentView(R.layout.activity_settingcenter);
 
 		pref = FileInstance.getPref(this);
+		whitch_selected = pref.getInt("style_id", 0);
+
 		boolean stat = pref.getBoolean("stat", true);
 		sr = (SettingRelativeLayout) findViewById(R.id.sr);
 		cb = (CheckBox) sr.findViewById(R.id.cb);
@@ -55,6 +66,15 @@ public class SettingCenter extends Activity implements OnClickListener {
 		comming_show.setDefaultStat(commingshow_stat);
 		comming_show.setOnClickListener(this);
 
+		commingstyle_change = (LinearLayout) findViewById(R.id.commingstyle_change);
+		tv_showStyle = (TextView) commingstyle_change
+				.findViewById(R.id.tv_showstyle);
+		commingstyle_change.setOnClickListener(this);
+		tv_showStyle.setText(AppConst.getItem()[whitch_selected]);
+
+		commingshow_location = (LinearLayout) findViewById(R.id.commingshow_location);
+		commingshow_location.setOnClickListener(this);
+
 	}
 
 	@Override
@@ -64,7 +84,7 @@ public class SettingCenter extends Activity implements OnClickListener {
 			if (cb.isChecked()) {
 				cb.setChecked(false);
 				desc.setText("关闭");
-				pref.edit().remove("stat").commit();
+				pref.edit().putBoolean("stat", false).commit();
 			} else {
 				cb.setChecked(true);
 				desc.setText("开启");
@@ -95,8 +115,30 @@ public class SettingCenter extends Activity implements OnClickListener {
 				startService(new Intent(this, CommingShowService.class));
 			}
 			break;
+		case R.id.commingstyle_change:
+			whitch_selected = pref.getInt("style_id", 0);
+			new AlertDialog.Builder(this)
+					.setIcon(R.drawable.point_r)
+					.setTitle("请选择样式")
+					.setSingleChoiceItems(AppConst.getItem(), whitch_selected,
+							new DialogInterface.OnClickListener() {
 
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									pref.edit().putInt("style_id", which)
+											.commit();
+									tv_showStyle.setText(AppConst.getItem()[which]);
+									dialog.dismiss();
+								}
+							}).setNegativeButton("取消", null).show();
+			break;
+		case R.id.commingshow_location:
+			startActivity(new Intent(this, CommingLocSetting.class));
+			startActivity(new Intent(this, CenterTipActivity.class));
+			overridePendingTransition(R.anim.alphaanim_coming,
+					R.anim.alphaanim_now);
+			break;
 		}
-
 	}
 }

@@ -26,7 +26,7 @@
         selfid:desc_on="开启"
         selfid:title="归属地查询自动捕捉" >
     </com.example.splash.SettingRelativeLayout>
-    
+
     <com.example.splash.SettingRelativeLayout
         android:id="@+id/comming_show"
         android:layout_width="match_parent"
@@ -35,5 +35,71 @@
         selfid:desc_on="开启"
         selfid:title="归属地来电显示" >
     </com.example.splash.SettingRelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/commingstyle_change"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rec_background_selector"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/point_r"
+            android:gravity="left"
+            android:paddingLeft="3dp"
+            android:paddingRight="10dp"
+            android:text="归属地显示样式"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tv_showstyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="3dp"
+            android:text="默认(半透明)"
+            android:textColor="#77000000"
+            android:textSize="13sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0.2dp"
+            android:layout_margin="3dp"
+            android:background="#77000000" />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/commingshow_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rec_background_selector"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/point_r"
+            android:gravity="left"
+            android:paddingLeft="3dp"
+            android:paddingRight="10dp"
+            android:text="来电显示位置设置"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tv_showloc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="3dp"
+            android:text="上"
+            android:textColor="#77000000"
+            android:textSize="13sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0.2dp"
+            android:layout_margin="3dp"
+            android:background="#77000000" />
+    </LinearLayout>
 
 </LinearLayout>

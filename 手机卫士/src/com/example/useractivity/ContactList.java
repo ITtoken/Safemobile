@@ -2,13 +2,16 @@ package com.example.useractivity;
 
 import java.util.List;
 
-import com.example.dao.DBDao;
 import com.example.mobilesafe.R;
+import com.example.utils.DBContactsUtils;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,8 +27,22 @@ public class ContactList extends Activity {
 
 		contact_list = (ListView) findViewById(R.id.contact_list);
 		contact_list.setAdapter(new ContectAdapter());
+		contact_list.setOnItemClickListener(new ItemListener());
 
-		 DBDao.gteContacts(this);
+		datas = DBContactsUtils.gteContacts(this);
+	}
+
+	class ItemListener implements OnItemClickListener {
+
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			Intent data = new Intent();
+			data.putExtra("return_info", datas.get(position));
+			setResult(0, data);
+			finish();
+		}
+
 	}
 
 	class ContectAdapter extends BaseAdapter {
@@ -51,19 +68,20 @@ public class ContactList extends Activity {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View view = null;
-			ViewHolder vh = null;
+			ViewHolder vh = new ViewHolder();
 			if (convertView != null) {
 				view = convertView;
 				vh = (ViewHolder) view.getTag();
 			} else {
 				view = View.inflate(ContactList.this, R.layout.item_listview,
 						null);
-				vh.tv_num = (TextView) view.findViewById(R.id.name);
+				vh.tv_name = (TextView) view.findViewById(R.id.name);
+				vh.phone_num = (TextView) view.findViewById(R.id.phone_num);
 				view.setTag(vh);
 			}
-
-			vh.tv_num = (TextView) view.findViewById(R.id.name);
-			vh.tv_num.setText(datas.get(position));
+			String[] content = datas.get(position).split(":");
+			vh.tv_name.setText(content[0]);
+			vh.phone_num.setText(content[1]);
 			return view;
 		}
 
@@ -74,8 +92,10 @@ public class ContactList extends Activity {
 		 *
 		 */
 		class ViewHolder {
-			TextView tv_num;
+			public TextView phone_num;
+			public TextView tv_name;
 		}
 
 	}
+
 }

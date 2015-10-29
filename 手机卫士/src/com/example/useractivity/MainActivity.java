@@ -3,12 +3,12 @@ package com.example.useractivity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,15 +31,18 @@ public class MainActivity extends Activity {
 	}
 
 	private static final int EXIT_SELECTED = 0;
+	private static final int exitMenu = 1;
 	private GridView gv_item;
 	private SharedPreferences preferences;
 	private String[] strs = new String[] { "手机防盗", "通讯卫士", "软件管理", "进程管理",
-			"流量统计", "杀毒软件", "缓存清理", "高级工具", "设置中心" };
+			"流量统计", "杀毒软件", "缓存清理" };
 	private int[] ids = new int[] { R.drawable.home_safe,
 			R.drawable.home_callmsgsafe, R.drawable.home_apps,
 			R.drawable.home_taskmanager, R.drawable.home_netmanager,
 			R.drawable.home_trojan, R.drawable.home_sysoptimize,
 			R.drawable.home_tools, R.drawable.home_settings };
+	private Button menu_bar;
+	private TextView tv_titlwbar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +66,8 @@ public class MainActivity extends Activity {
 					startActivity(intent_callsafe);
 					break;
 				case R.drawable.home_apps:// 软件管理
-					Toast.makeText(MainActivity.this, "此模块还未开放",
-							Toast.LENGTH_SHORT).show();
+					startActivity(new Intent(MainActivity.this,
+							SoftManagerActivity.class));
 					break;
 				case R.drawable.home_taskmanager:// 进程管理
 					Toast.makeText(MainActivity.this, "此模块还未开放",
@@ -81,18 +85,55 @@ public class MainActivity extends Activity {
 					Toast.makeText(MainActivity.this, "此模块还未开放",
 							Toast.LENGTH_SHORT).show();
 					break;
-				case R.drawable.home_tools:// 高级工具
-					startActivity(new Intent(MainActivity.this,
-							ToolsActivity.class));
-					break;
-				case R.drawable.home_settings:// 设置中心
-					Intent intent_setting = new Intent(MainActivity.this,
-							SettingCenter.class);
-					startActivity(intent_setting);
-					break;
 				}
 			}
 		});
+
+		menu_bar = (Button) findViewById(R.id.menu_bar);
+		menu_bar.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				View contentView = View.inflate(MainActivity.this,
+						R.layout.window_main_menu, null);
+
+				final PopupWindow window = new PopupWindow(contentView,
+						menu_bar.getWidth() * 3, menu_bar.getHeight() * 5 / 2);
+				window.setFocusable(true);
+				window.setBackgroundDrawable(getResources().getDrawable(
+						R.drawable.popup_win_bc));
+				window.setOutsideTouchable(true);
+				window.setAnimationStyle(R.style.PopupWindowAnim);// 设置动画效果
+				window.update();// 更新显示
+				window.showAsDropDown(menu_bar, 0, 0);
+
+				/* 设置menubar的条目 */
+				TextView adv_tools = (TextView) contentView
+						.findViewById(R.id.adv_tools);
+				TextView setting = (TextView) contentView
+						.findViewById(R.id.setting);
+				adv_tools.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						startActivity(new Intent(MainActivity.this,
+								ToolsActivity.class));
+						window.dismiss();
+					}
+				});
+
+				setting.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						Intent intent_setting = new Intent(MainActivity.this,
+								SettingCenter.class);
+						startActivity(intent_setting);
+						window.dismiss();
+					}
+				});
+
+			}
+		});
+
+		tv_titlwbar = (TextView) findViewById(R.id.tv_titlebar);
 	}
 
 	class GvAdapter extends BaseAdapter {
@@ -144,7 +185,7 @@ public class MainActivity extends Activity {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("提示");
 		builder.setMessage("确定退出本应用吗?");
-		builder.setPositiveButton("确定", new OnClickListener() {
+		builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				finish();
@@ -291,4 +332,38 @@ public class MainActivity extends Activity {
 	 */
 	public native String firstPass(String password, int length);
 
+	// 退出按钮
+	@Override
+	public void onBackPressed() {
+		showExitDialog();
+	}
+
+	/**
+	 * 显示退出提示对话框
+	 */
+	private void showExitDialog() {
+		new AlertDialog.Builder(this)
+				.setTitle("提示")
+				.setIcon(R.drawable.update_tip)
+				.setMessage("确定退出吗？")
+				.setPositiveButton("确定退出",
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								MainActivity.this.finish();
+							}
+						})
+				.setNegativeButton("再等一下",
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.dismiss();
+							}
+						}).show();
+
+	}
 }

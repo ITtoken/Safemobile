@@ -2,13 +2,13 @@
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
     <style name="AppBaseTheme" parent="android:Theme.Light">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
+            backward-compatibility can go here.
         -->
     </style>
 
@@ -34,7 +34,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0.2dp</item>
         <item name="android:layout_gravity">center_horizontal</item>
-        <item name="android:background">#33000000</item>
+        <item name="android:background">#C0C0C0</item>
     </style>
 
     <!-- 位置提示图标打开（on） -->
@@ -86,6 +86,11 @@
         <item name="android:padding">10dp</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">#ffffff</item>
+    </style>
+
+    <style name="PopupWindowAnim" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/pw_enter_anim</item>
+        <item name="android:windowExitAnimation">@anim/pw_out_anim</item>
     </style>
 
 </resources>

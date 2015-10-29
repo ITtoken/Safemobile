@@ -2,15 +2,13 @@ package com.example.useractivity;
 
 import java.util.List;
 
-import android.animation.Animator;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -114,17 +112,26 @@ public class BlackContacterActivity extends Activity implements OnClickListener 
 		case R.id.add_blackcontacter:
 			final String telenum = et_telenum.getText().toString();
 			if (!TextUtils.isEmpty(telenum)) {
-				boolean exist = operater.queryFromTelnum(telenum);
-				if (exist) {
+				if (!telenum.matches("^\\d+$")) {
+					/* 当号码格式不正确时,提示'格式错误' */
 					ShakeUtils.shakeAnim(this, et_telenum);
 					ShakeUtils.deviceShake(this);
-					new MUtils(BlackContacterActivity.this)
-							.printToast("此用户已存在黑名单中");
+					new MUtils(this).printToast("号码格式错误");
 				} else {
-					operater.insert(telenum);
-					new MUtils(BlackContacterActivity.this).printToast("添加成功");
-					finish();
+					boolean exist = operater.queryFromTelnum(telenum);
+					if (exist) {
+						ShakeUtils.shakeAnim(this, et_telenum);
+						ShakeUtils.deviceShake(this);
+						new MUtils(BlackContacterActivity.this)
+								.printToast("此用户已存在黑名单中");
+					} else {
+						operater.insert(telenum);
+						new MUtils(BlackContacterActivity.this)
+								.printToast("添加成功");
+						finish();
+					}
 				}
+
 			} else {
 				/* 添加震动效果 */
 				ShakeUtils.shakeAnim(this, et_telenum);
@@ -133,8 +140,21 @@ public class BlackContacterActivity extends Activity implements OnClickListener 
 			}
 			break;
 		case R.id.chose_contacter:
-			new MUtils(this).printToast("选择联系人");
+			Intent intent = new Intent(this, ContactList.class);
+			startActivityForResult(intent, 0);
+			overridePendingTransition(R.anim.transeanim_left_coming,
+					R.anim.transeanim_left_now);
 			break;
+		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (data != null) {
+			String return_info = data.getStringExtra("return_info");
+			String num = return_info.substring(return_info.indexOf(":") + 1);
+			et_telenum.setText(num);
 		}
 	}
 }

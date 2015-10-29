@@ -61,6 +61,7 @@ public class SplashActivity extends Activity {
 	private SharedPreferences pref;
 	private RelativeLayout rl_anim;
 	private AnimationDrawable ad;
+	private boolean commingshow_stat;
 
 	private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
@@ -90,7 +91,6 @@ public class SplashActivity extends Activity {
 			}
 		}
 	};
-	private boolean commingshow_stat;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -161,7 +161,7 @@ public class SplashActivity extends Activity {
 			public void run() {
 				msg = handler.obtainMessage();
 				try {
-					URL url = new URL("http://10.100.0.173/update.json");
+					URL url = new URL("http://localhost/update.json");
 					conn = (HttpURLConnection) url.openConnection();
 					conn.setRequestMethod("GET");
 					conn.setConnectTimeout(5000);
@@ -296,7 +296,6 @@ public class SplashActivity extends Activity {
 
 							@Override
 							public void onSuccess(ResponseInfo<File> arg0) {
-								// tv_downStat.setVisibility(View.GONE);//
 								// 设置为不可见
 								Toast.makeText(SplashActivity.this, "下载成功",
 										Toast.LENGTH_SHORT).show();

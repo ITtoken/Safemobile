@@ -2,12 +2,11 @@ package com.example.useractivity;
 
 import java.util.Random;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -24,6 +23,7 @@ public class DerectionThree extends BaseDerectActivity implements
 	private TextView chose_contacter;
 	private EditText et_safeNum;
 	private TextView save_safenum;
+	private String safeNum;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +41,7 @@ public class DerectionThree extends BaseDerectActivity implements
 		chose_contacter.setOnClickListener(this);
 		save_safenum.setOnClickListener(this);
 
-		String safeNum = prefer.getString("safenum", null);
+		safeNum = prefer.getString("safenum", null);
 		if (!TextUtils.isEmpty(safeNum)) {
 			et_safeNum.setHint("安全号码已设置(" + safeNum + ")");
 			et_safeNum.setEnabled(false);
@@ -73,11 +73,11 @@ public class DerectionThree extends BaseDerectActivity implements
 
 			break;
 		case R.id.chose_contanceter:
-			// Intent intent = new Intent(this, ContactList.class);
-			// startActivity(intent);
-			// overridePendingTransition(R.anim.transeanim_left_coming,
-			// R.anim.transeanim_left_now);
-			new MUtils(this).printToast("选择联系人");
+			/* 启动联系人列表 */
+			Intent intent = new Intent(this, ContactList.class);
+			startActivityForResult(intent, 0);
+			overridePendingTransition(R.anim.transeanim_left_coming,
+					R.anim.transeanim_left_now);
 			break;
 		case R.id.save_safenum:
 			/* 改变安全号码状态，若为FALSE，表示为设置安全号码状态 */
@@ -104,11 +104,18 @@ public class DerectionThree extends BaseDerectActivity implements
 			} else {
 				String etSafeNum = et_safeNum.getText().toString();
 				if (!TextUtils.isEmpty(etSafeNum)) {
-					prefer.edit().putString("safenum", etSafeNum).commit();
-					et_safeNum.setEnabled(false);
-					save_safenum.setText("更换安全号码");
-					prefer.edit().putBoolean("changenum", true).commit();/* 状态变为更换安全号码 */
-					new MUtils(this).printToast("安全号码设置成功");
+					if (!etSafeNum.matches("^\\d+$")) {
+						/* 当号码格式不正确时,提示'格式错误' */
+						ShakeUtils.shakeAnim(this, et_safeNum);
+						ShakeUtils.deviceShake(this);
+						new MUtils(this).printToast("安全号码格式错误");
+					} else {
+						prefer.edit().putString("safenum", etSafeNum).commit();
+						et_safeNum.setEnabled(false);
+						save_safenum.setText("更换安全号码");
+						prefer.edit().putBoolean("changenum", true).commit();/* 状态变为更换安全号码 */
+						new MUtils(this).printToast("安全号码设置成功");
+					}
 				} else {
 					ShakeUtils.shakeAnim(this, et_safeNum);
 					ShakeUtils.deviceShake(this);
@@ -129,4 +136,23 @@ public class DerectionThree extends BaseDerectActivity implements
 		showPrevPage(this, DerectionTwo.class);
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		String safeNum = prefer.getString("safenum", null);
+		/* 如果安全号码已设置,则提示不能在重复设置 */
+		if (!TextUtils.isEmpty(safeNum)) {
+			new MUtils(this).printToast("安全号码已设置,不能重复设置");
+		} else {
+			if (data != null) {
+				// 将返回的数据中的号码字段取出并设置到EditText中
+				String return_info = data.getStringExtra("return_info");
+				String num = return_info
+						.substring(return_info.indexOf(":") + 1);
+				et_safeNum.setText(num);
+			}
+
+		}
+
+	}
 }

@@ -1,23 +1,36 @@
 package com.example.utils;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.telephony.gsm.SmsManager;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
+import android.telephony.SmsManager;
+import android.text.format.Formatter;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mobilesafe.R;
+import com.example.other.InstallAppInfo;
 
 public class MUtils {
 	private Context context;
+	private SharedPreferences pref;
 
 	public MUtils(Context context) {
 		this.context = context;
+		pref = FileInstance.getPref(context);
 	}
 
 	/**
@@ -36,12 +49,15 @@ public class MUtils {
 	 *            显示在吐司上的文本内容
 	 */
 	public void printStyleToast(String message) {
+		int whitch = pref.getInt("style_id", 0);
 		Toast toast = new Toast(context);
 		toast.setDuration(Toast.LENGTH_LONG);
 		/* 设置显示位置和位置偏移量 */
 		toast.setGravity(Gravity.TOP, 0, 30);
 		/* 填充Toast布局的背景 */
 		View view = View.inflate(context, R.layout.toast_background, null);
+		LinearLayout toast_ll = (LinearLayout) view.findViewById(R.id.toast_ll);
+		toast_ll.setBackgroundResource(AppConst.getId(whitch));
 		TextView toast_tv = (TextView) view.findViewById(R.id.toast_tv);
 		toast_tv.setText(message);
 		toast.setView(view);
@@ -112,8 +128,13 @@ public class MUtils {
 	 * @param text
 	 */
 	public void sendSMS(String descAddress, String text) {
+		/*
+		 * android提供了两个SmsManager,gsm包下的是不被推荐使用的,而android.telephony.
+		 * SmsManager是现在使用的
+		 */
 		SmsManager sm = SmsManager.getDefault();
 		sm.sendTextMessage(descAddress, null, text, null, null);
 	}
 
+	
 }
