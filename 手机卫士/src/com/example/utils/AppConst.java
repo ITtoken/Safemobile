@@ -1,5 +1,8 @@
 package com.example.utils;
 
+import android.content.Context;
+import android.os.Environment;
+
 import com.example.mobilesafe.R;
 import com.example.mobilesafe.R.id;
 
@@ -34,6 +37,26 @@ public class AppConst {
 	 * appinfo文件名
 	 */
 	public static final String APPINFO = "appinfo";/* appinfo文件名 */
+
+	/**
+	 * 手机屏幕宽度
+	 */
+	public static final String SCREEN_WIDTH = "screen_width";
+	/**
+	 * 手机屏幕高度
+	 */
+	public static final String SCREEN_HEIGHT = "screen_height";
+
+	/**
+	 * 备份位置:SD卡
+	 */
+	public static final String BACKUP_SDCARD = Environment
+			.getExternalStorageDirectory() + "/MobilePhone";
+	/**
+	 * 备份位置:手机内存
+	 */
+	public static final String BACKUP_INNER = " /data/data/com.example.mobilesafe"
+			+ "/files/MobilePhone";
 
 	/**
 	 * 来电显示Toast的资源ID

@@ -35,6 +35,39 @@
         selfid:desc_on="开启"
         selfid:title="归属地来电显示" >
     </com.example.splash.SettingRelativeLayout>
+    
+          
+    <LinearLayout
+        android:id="@+id/shortcut_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rec_background_selector"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawableEnd="@drawable/point_r"
+            android:gravity="left"
+            android:paddingLeft="3dp"
+            android:paddingRight="10dp"
+            android:text="创建桌面快捷方式"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/shortcut_stat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="3dp"
+            android:textColor="#77000000"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0.2dp"
+            android:layout_margin="3dp"
+            android:background="#33000000" />
 
     <LinearLayout
         android:id="@+id/commingstyle_change"
@@ -62,12 +95,12 @@
             android:textColor="#77000000"
             android:textSize="13sp" />
 
+    </LinearLayout>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0.2dp"
             android:layout_margin="3dp"
-            android:background="#77000000" />
-    </LinearLayout>
+            android:background="#33000000" />
     
     <LinearLayout
         android:id="@+id/commingshow_location"
@@ -78,7 +111,7 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:drawableEnd="@drawable/point_r"
             android:gravity="left"
             android:paddingLeft="3dp"
@@ -91,15 +124,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="3dp"
-            android:text="上"
             android:textColor="#77000000"
             android:textSize="13sp" />
+    </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0.2dp"
             android:layout_margin="3dp"
-            android:background="#77000000" />
-    </LinearLayout>
+            android:background="#33000000" />
+        
+  
+        
+        
 
 </LinearLayout>

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
@@ -18,8 +19,10 @@ import com.example.service.CommingShowService;
 import com.example.splash.SettingRelativeLayout;
 import com.example.utils.AppConst;
 import com.example.utils.FileInstance;
+import com.example.utils.MUtils;
 
 public class SettingCenter extends Activity implements OnClickListener {
+
 	private SettingRelativeLayout sr;
 	private CheckBox cb;
 	private TextView desc;
@@ -34,6 +37,7 @@ public class SettingCenter extends Activity implements OnClickListener {
 	private TextView tv_showStyle;
 	private int whitch_selected;
 	private LinearLayout commingshow_location;
+	private LinearLayout shortcut_setting;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +70,7 @@ public class SettingCenter extends Activity implements OnClickListener {
 		comming_show.setDefaultStat(commingshow_stat);
 		comming_show.setOnClickListener(this);
 
+		// 來電顯示樣式顯示
 		commingstyle_change = (LinearLayout) findViewById(R.id.commingstyle_change);
 		tv_showStyle = (TextView) commingstyle_change
 				.findViewById(R.id.tv_showstyle);
@@ -74,6 +79,9 @@ public class SettingCenter extends Activity implements OnClickListener {
 
 		commingshow_location = (LinearLayout) findViewById(R.id.commingshow_location);
 		commingshow_location.setOnClickListener(this);
+
+		shortcut_setting = (LinearLayout) findViewById(R.id.shortcut_setting);
+		shortcut_setting.setOnClickListener(this);
 
 	}
 
@@ -139,6 +147,32 @@ public class SettingCenter extends Activity implements OnClickListener {
 			overridePendingTransition(R.anim.alphaanim_coming,
 					R.anim.alphaanim_now);
 			break;
+		case R.id.shortcut_setting:
+			// 创建快捷方式
+			createShortcut();
+			new MUtils(this).printToast("快捷方式创建成功!");
+			break;
 		}
+	}
+
+	/*
+	 * com.example.useractivity.MainActivity 创建快捷方式
+	 */
+	private void createShortcut() {
+		Intent intent = new Intent(
+				"com.android.launcher.action.INSTALL_SHORTCUT");
+		intent.putExtra("duplicate", false);// 不允许重复安装：true表示允许重复安装，默认为true
+		Parcelable icon = Intent.ShortcutIconResource.fromContext(this,
+				R.drawable.ic_launcher);
+
+		Intent myIntent = new Intent();// 启动主页面的快捷方式
+		myIntent.setAction("com.example.mainaction");
+		myIntent.addCategory(Intent.CATEGORY_DEFAULT);
+
+		intent.putExtra(Intent.EXTRA_SHORTCUT_NAME,
+				getResources().getString(R.string.app_name));
+		intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, icon);
+		intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, myIntent);
+		sendBroadcast(intent);
 	}
 }

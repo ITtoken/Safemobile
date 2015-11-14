@@ -1,32 +1,32 @@
 package com.example.utils;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
+import android.graphics.Color;
+import android.net.Uri;
 import android.telephony.SmsManager;
-import android.text.format.Formatter;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mobilesafe.R;
-import com.example.other.InstallAppInfo;
 
 public class MUtils {
 	private Context context;
 	private SharedPreferences pref;
+	private static long times[] = new long[2];
 
 	public MUtils(Context context) {
 		this.context = context;
@@ -136,5 +136,68 @@ public class MUtils {
 		sm.sendTextMessage(descAddress, null, text, null, null);
 	}
 
-	
+	/**
+	 * 设置默认的文本控件
+	 * 
+	 * @param text
+	 *            控件的额显示内容
+	 */
+	public TextView myText(String text) {
+		TextView tv_item = new TextView(context);
+		tv_item.setText(text);
+		tv_item.setTextColor(Color.WHITE);
+		tv_item.setBackgroundResource(R.drawable.soft_item_bc);
+		tv_item.setWidth(LayoutParams.MATCH_PARENT);
+		int screen_height = getScreenSize(context).get(AppConst.SCREEN_HEIGHT);
+		tv_item.setHeight((int) (screen_height * (30 / 480f)));
+		return tv_item;
+	}
+
+	/**
+	 * 获取屏幕的宽高度
+	 */
+	public static Map<String, Integer> getScreenSize(Context context) {
+		Activity activity = (Activity) context;// 强转获取一个Activity对象
+		Map<String, Integer> screenSize = new HashMap<String, Integer>();
+		/* 获取屏幕的宽高度 */
+		DisplayMetrics mertrix = new DisplayMetrics();
+		activity.getWindowManager().getDefaultDisplay().getMetrics(mertrix);
+		int window_width = mertrix.widthPixels;
+		int window_height = mertrix.heightPixels;
+		screenSize.put(AppConst.SCREEN_WIDTH, window_width);
+		screenSize.put(AppConst.SCREEN_HEIGHT, window_height);
+		return screenSize;
+	}
+
+	/**
+	 * 双击事件
+	 * 
+	 * @param gapTime
+	 *            间隔时长
+	 * @return 是否满足双击要求
+	 */
+	public static boolean doubleClick(long gapTime) {
+		System.arraycopy(times, 1, times, 0, times.length - 1);
+		long time1 = System.currentTimeMillis();
+		times[times.length - 1] = time1;
+		if (times[times.length - 1] - times[0] <= gapTime) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * 软件卸载工具方法
+	 * 
+	 * @param context
+	 * @param packageName
+	 */
+	public static void softUnstall(Context context, String packageName) {
+		Intent unstallintent = new Intent();
+		unstallintent.setAction(Intent.ACTION_DELETE);
+		unstallintent.addCategory(Intent.CATEGORY_DEFAULT);
+		unstallintent.setData(Uri.parse("package:" + packageName));/* 需要带有要卸载应用的包名 */
+		context.startActivity(unstallintent);
+	}
+
 }

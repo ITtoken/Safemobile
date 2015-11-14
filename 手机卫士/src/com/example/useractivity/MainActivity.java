@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.example.mobilesafe.R;
 import com.example.utils.FileInstance;
 import com.example.utils.MD5Utils;
+import com.example.utils.MUtils;
 
 public class MainActivity extends Activity {
 	static {
@@ -34,13 +35,12 @@ public class MainActivity extends Activity {
 	private static final int exitMenu = 1;
 	private GridView gv_item;
 	private SharedPreferences preferences;
-	private String[] strs = new String[] { "手机防盗", "通讯卫士", "软件管理", "进程管理",
-			"流量统计", "杀毒软件", "缓存清理" };
+	private String[] strs = new String[] { "手机防盗", "通讯卫士", "应用管理", "流量统计",
+			"杀毒软件", "缓存清理" };
 	private int[] ids = new int[] { R.drawable.home_safe,
 			R.drawable.home_callmsgsafe, R.drawable.home_apps,
-			R.drawable.home_taskmanager, R.drawable.home_netmanager,
-			R.drawable.home_trojan, R.drawable.home_sysoptimize,
-			R.drawable.home_tools, R.drawable.home_settings };
+			R.drawable.home_netmanager, R.drawable.home_trojan,
+			R.drawable.home_sysoptimize };
 	private Button menu_bar;
 	private TextView tv_titlwbar;
 
@@ -67,11 +67,7 @@ public class MainActivity extends Activity {
 					break;
 				case R.drawable.home_apps:// 软件管理
 					startActivity(new Intent(MainActivity.this,
-							SoftManagerActivity.class));
-					break;
-				case R.drawable.home_taskmanager:// 进程管理
-					Toast.makeText(MainActivity.this, "此模块还未开放",
-							Toast.LENGTH_SHORT).show();
+							AppManagerActivity.class));
 					break;
 				case R.drawable.home_netmanager:// 流量统计
 					Toast.makeText(MainActivity.this, "此模块还未开放",
@@ -335,35 +331,11 @@ public class MainActivity extends Activity {
 	// 退出按钮
 	@Override
 	public void onBackPressed() {
-		showExitDialog();
-	}
-
-	/**
-	 * 显示退出提示对话框
-	 */
-	private void showExitDialog() {
-		new AlertDialog.Builder(this)
-				.setTitle("提示")
-				.setIcon(R.drawable.update_tip)
-				.setMessage("确定退出吗？")
-				.setPositiveButton("确定退出",
-						new DialogInterface.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								MainActivity.this.finish();
-							}
-						})
-				.setNegativeButton("再等一下",
-						new DialogInterface.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								dialog.dismiss();
-							}
-						}).show();
-
+		boolean doubleClick = MUtils.doubleClick(2500);
+		if (doubleClick) {
+			finish();
+		} else {
+			new MUtils(this).printToast("再按一次退出手机卫士");
+		}
 	}
 }
