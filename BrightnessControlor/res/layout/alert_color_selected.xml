@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp" >
+
+        <Button
+            android:id="@+id/color_skin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_selector"
+            android:drawableLeft="@drawable/color_selected_skin"
+            android:gravity="center"
+            android:text="皮肤"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/color_green"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_selector"
+            android:drawableLeft="@drawable/color_selected_green"
+            android:gravity="center"
+            android:text="浅绿"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/color_grey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_selector"
+            android:drawableLeft="@drawable/color_selected_grey"
+            android:gravity="center"
+            android:text="暗灰"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+</LinearLayout>
